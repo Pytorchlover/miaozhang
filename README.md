@@ -1,129 +1,116 @@
-# AI记账小程序
+# miaozhang
 
-基于微信云开发的智能记账小程序，支持截图识别、AI智能分类、消费预警等功能。
+🐱 一款可爱的 AI 记账助手微信小程序
+
+发送付款截图，AI 自动识别记账；智能监控消费，超阈值贴心提醒。
 
 ## 功能特性
 
 ### 核心功能
-- **截图记账**：发送付款截图，AI自动识别金额、商家、日期
-- **语音/文字记账**：直接告诉AI消费内容
-- **智能分类**：AI根据商家信息自动判断消费分类
-- **消费预警**：日/周/月三级预警，超阈值自动提醒
+- 📸 **截图记账**：发送付款截图，百度 OCR + DeepSeek AI 自动识别金额、商家、分类
+- 💬 **自然语言记账**：直接告诉 AI "今天午餐花了 35 元"
+- 📅 **日历视图**：按日历查看每日消费明细
+- 🎯 **消费预警**：根据月收入自动计算日/周/月三级预警阈值
 
-### AI能力
-- DeepSeek大语言模型支持
-- 智能理解用户财务状况
-- 自适应阈值计算
-- 自然语言交互
+### AI 能力
+- 🤖 DeepSeek 大语言模型智能分析
+- 🏷️ 自动识别商家并分类（餐饮、购物、交通等 9 类）
+- 💕 温暖可爱的对话式交互
+- 📊 智能财务规划建议
 
-## 技术架构
+## 技术栈
 
-```
-├── miniprogram/          # 小程序前端
-│   ├── pages/
-│   │   ├── chat/         # 聊天记账页
-│   │   ├── bill/         # 账单列表页
-│   │   └── settings/     # 设置页
-│   ├── services/         # API服务
-│   └── utils/            # 工具函数
-│
-└── cloud/                # 云开发后端
-    └── functions/
-        ├── login/              # 登录
-        ├── ocr_recognize/     # OCR识别
-        ├── save_transaction/  # 保存交易
-        ├── get_transactions/   # 查询交易
-        ├── calculate_threshold/# 计算阈值
-        └── send_alert/        # 发送预警
-```
+### 前端
+- 微信小程序原生开发
+- 自定义组件（日历、底部导航）
+- 粉色治愈系 UI 风格
+
+### 后端
+- Python 3.11 + FastAPI
+- LangChain 1.x + LangGraph 1.x
+- 百度 OCR 通用文字识别
+- DeepSeek Chat API
+- SQLite 本地存储
 
 ## 快速开始
 
-### 1. 配置云开发环境
-
-1. 登录 [微信公众平台](https://mp.weixin.qq.com/)
-2. 开通云开发，创建环境
-3. 在 `project.config.json` 中配置 `appid`
-4. 在 `cloudbaserc.json` 中配置环境ID
-
-### 2. 配置API Key
-
-在微信公众平台或代码中配置：
-- **DeepSeek API Key**：用于AI对话和智能分类
-- **百度OCR API Key**：用于截图识别（可选）
-
-### 3. 部署云函数
+### 1. 克隆项目
 
 ```bash
-# 在微信开发者工具中
-# 右键 cloud/functions 文件夹
-# 选择 "上传并部署"
+git clone https://github.com/Pytorchlover/miaozhang.git
+cd miaozhang
 ```
 
-### 4. 配置订阅消息
+### 2. 配置后端
 
-1. 在微信公众平台添加订阅消息模板
-2. 将模板ID填入云函数配置
+```bash
+cd server
+cp .env.example .env
+```
 
-## 使用指南
+编辑 `.env` 文件，填入你的 API Key：
 
-### 首次使用
+```env
+DEEPSEEK_API_KEY=your_deepseek_api_key
+BAIDU_API_KEY=your_baidu_api_key
+BAIDU_SECRET_KEY=your_baidu_secret_key
+```
 
-1. 打开小程序，切换到"设置"页面
-2. 配置 DeepSeek API Key
-3. 告诉AI你的月收入（如："我的月收入是15000元"）
-4. AI会自动设置预警阈值
+安装依赖并启动：
 
-### 日常记账
+```bash
+pip install -r requirements.txt
+python main.py
+```
 
-1. **截图记账**：点击聊天框的"+"号，选择图片发送
-2. **手动记账**：直接告诉AI（如："今天午餐花了35元"）
-3. AI识别后会显示确认卡片，确认后保存
+后端运行在 `http://localhost:3000`
 
-### 查看账单
+### 3. 配置小程序
 
-- 切换到"账单"页面
-- 支持按今日/本周/本月筛选
-- 显示支出、收入、结余统计
+1. 打开微信开发者工具，导入项目
+2. 在 `app.js` 中确认后端地址：
+   ```javascript
+   globalData: {
+     serverUrl: 'http://localhost:3000'
+   }
+   ```
+3. 编译运行
 
-## 消费预警规则
-
-| 周期 | 默认阈值 | 说明 |
-|------|---------|------|
-| 日 | 月收入×5% | 单日消费上限 |
-| 周 | 月收入×20% | 单周消费上限 |
-| 月 | 月收入×80% | 单月消费上限 |
-
-阈值可根据实际收入在"设置"页面调整。
-
-## 数据安全
-
-- 所有数据存储在微信云开发数据库
-- API Key建议通过环境变量配置
-- 用户隐私数据加密存储
-
-## 开发指南
-
-### 目录结构
+## 项目结构
 
 ```
 wechatapp/
-├── miniprogram/           # 小程序前端
-│   ├── pages/            # 页面
-│   ├── components/       # 组件
-│   ├── services/        # 服务层
-│   └── utils/           # 工具
-├── cloud/               # 云开发
-│   └── functions/      # 云函数
-├── project.config.json  # 项目配置
-└── cloudbaserc.json     # 云开发配置
+├── pages/                    # 页面
+│   ├── chat/                 # 聊天记账页
+│   ├── bill/                 # 账单日历页
+│   └── settings/             # 设置页
+├── components/                # 组件
+│   ├── calendar/             # 日历组件
+│   └── custom-tab-bar/       # 自定义底部导航
+├── server/                   # Python 后端
+│   ├── main.py               # FastAPI 主程序
+│   ├── requirements.txt      # Python 依赖
+│   └── .env.example          # 环境变量示例
+└── utils/                    # 工具函数
 ```
 
-### 添加新的云函数
+## API 接口
 
-1. 在 `cloud/functions/` 下创建目录
-2. 添加 `index.js` 入口文件
-3. 在微信开发者工具中右键部署
+| 接口 | 方法 | 说明 |
+|------|------|------|
+| `/api/login` | GET | 获取用户 openid |
+| `/api/save_transaction` | POST | 保存交易/AI 对话 |
+| `/api/get_transactions` | GET | 获取交易记录 |
+| `/api/calculate_threshold` | GET | 计算预警阈值 |
+| `/api/ocr_recognize` | POST | OCR 识别截图 |
+
+## 消费预警规则
+
+| 周期 | 阈值 | 说明 |
+|------|------|------|
+| 日 | 月收入 × 5% | 单日消费上限 |
+| 周 | 月收入 × 20% | 单周消费上限 |
+| 月 | 月收入 × 80% | 单月消费上限 |
 
 ## License
 

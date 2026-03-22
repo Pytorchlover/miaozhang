@@ -36,3 +36,7 @@ __o啦__/ # 编译后的代码
 
 # Node (如果有)
 node_modules/
+
+# Claude Code 配置
+.claude/
+skills-lock.json
