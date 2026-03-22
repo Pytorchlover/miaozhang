@@ -87,7 +87,63 @@
   <!-- 交易列表 -->
   <scroll-view scroll-y class="transaction-list">
     <view wx:if="{{transactions.length === 0}}" class="empty-state">
-      <view class="empty-icon">🐷</view>
+      <view class="cat-mascot">
+        <!-- 漂浮装饰 -->
+        <view class="floating-elements">
+          <text class="floating-coin coin-1">💰</text>
+          <text class="floating-coin coin-2">✨</text>
+          <text class="floating-coin coin-3">💎</text>
+          <text class="floating-star star-1">⭐</text>
+          <text class="floating-star star-2">✨</text>
+          <text class="floating-star star-3">⭐</text>
+          <text class="floating-heart heart-1">💕</text>
+          <text class="floating-heart heart-2">💗</text>
+          <text class="floating-heart heart-3">💖</text>
+        </view>
+
+        <!-- 猫咪身体 -->
+        <view class="cat-body"></view>
+
+        <!-- 猫咪头部 -->
+        <view class="cat-head">
+          <!-- 耳朵 -->
+          <view class="cat-ears">
+            <view class="cat-ear left">
+              <view class="cat-ear-inner"></view>
+            </view>
+            <view class="cat-ear right">
+              <view class="cat-ear-inner"></view>
+            </view>
+          </view>
+
+          <!-- 眼睛 -->
+          <view class="cat-eyes">
+            <view class="cat-eye"></view>
+            <view class="cat-eye"></view>
+          </view>
+
+          <!-- 鼻子和嘴巴 -->
+          <view class="cat-nose"></view>
+          <view class="cat-mouth"></view>
+
+          <!-- 腮红 -->
+          <view class="cat-blush left"></view>
+          <view class="cat-blush right"></view>
+
+          <!-- 蝴蝶结 -->
+          <view class="cat-bow">
+            <view class="cat-bow-left"></view>
+            <view class="cat-bow-center"></view>
+            <view class="cat-bow-right"></view>
+          </view>
+        </view>
+
+        <!-- 爪子 -->
+        <view class="cat-paws">
+          <view class="cat-paw"></view>
+          <view class="cat-paw"></view>
+        </view>
+      </view>
       <text class="empty-text">还没有记账记录</text>
       <text class="empty-hint">去记账页面发送截图开始吧~</text>
     </view>

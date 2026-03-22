@@ -3,8 +3,8 @@ App({
   globalData: {
     userInfo: null,
     openid: '',
-    // 本地服务器地址（开发测试用）
-    serverUrl: 'http://localhost:3000',
+    // 云服务器地址
+    serverUrl: 'https://spatialtemporal.xyz',
     deepseekApiKey: '',
     userFinancial: {
       monthlyIncome: 0,

@@ -1,8 +1,64 @@
 <!-- 设置页面 -->
 <view class="container">
-  <!-- 小猪吉祥物 -->
+  <!-- 小猫吉祥物 -->
   <view class="mascot-section">
-    <view class="mascot">🐷</view>
+    <view class="cat-mascot">
+      <!-- 漂浮装饰 -->
+      <view class="floating-elements">
+        <text class="floating-coin coin-1">💰</text>
+        <text class="floating-coin coin-2">✨</text>
+        <text class="floating-coin coin-3">💎</text>
+        <text class="floating-star star-1">⭐</text>
+        <text class="floating-star star-2">✨</text>
+        <text class="floating-star star-3">⭐</text>
+        <text class="floating-heart heart-1">💕</text>
+        <text class="floating-heart heart-2">💗</text>
+        <text class="floating-heart heart-3">💖</text>
+      </view>
+
+      <!-- 猫咪身体 -->
+      <view class="cat-body"></view>
+
+      <!-- 猫咪头部 -->
+      <view class="cat-head">
+        <!-- 耳朵 -->
+        <view class="cat-ears">
+          <view class="cat-ear left">
+            <view class="cat-ear-inner"></view>
+          </view>
+          <view class="cat-ear right">
+            <view class="cat-ear-inner"></view>
+          </view>
+        </view>
+
+        <!-- 眼睛 -->
+        <view class="cat-eyes">
+          <view class="cat-eye"></view>
+          <view class="cat-eye"></view>
+        </view>
+
+        <!-- 鼻子和嘴巴 -->
+        <view class="cat-nose"></view>
+        <view class="cat-mouth"></view>
+
+        <!-- 腮红 -->
+        <view class="cat-blush left"></view>
+        <view class="cat-blush right"></view>
+
+        <!-- 蝴蝶结 -->
+        <view class="cat-bow">
+          <view class="cat-bow-left"></view>
+          <view class="cat-bow-center"></view>
+          <view class="cat-bow-right"></view>
+        </view>
+      </view>
+
+      <!-- 爪子 -->
+      <view class="cat-paws">
+        <view class="cat-paw"></view>
+        <view class="cat-paw"></view>
+      </view>
+    </view>
     <text class="mascot-text">记账小助手设置</text>
   </view>
 
@@ -29,22 +85,27 @@
     </view>
     <view class="setting-hint">
       <text class="hint-icon">💡</text>
-      用于AI智能记账和阈值判断，请在
+      用于AI智能记账，请在
       <text class="link" bindtap="openDeepSeek">DeepSeek官网</text>
       申请
     </view>
   </view>
 
-  <!-- 用户信息 -->
+  <!-- 预警阈值设置 -->
   <view class="section">
     <view class="section-header">
-      <text class="section-emoji">💰</text>
-      <text class="section-title">财务信息</text>
+      <text class="section-emoji">🎯</text>
+      <text class="section-title">预警阈值</text>
+      <view class="mode-toggle" bindtap="toggleThresholdMode">
+        <text class="mode-text">{{isManualMode ? '手动设置' : '自动计算'}}</text>
+      </view>
     </view>
-    <view class="setting-card">
+
+    <!-- 自动模式：根据月收入计算 -->
+    <view wx:if="{{!isManualMode}}" class="setting-card">
       <view class="setting-item">
         <view class="setting-label-row">
-          <text class="setting-icon">📊</text>
+          <text class="setting-icon">💰</text>
           <text class="setting-label">月收入</text>
         </view>
         <view class="input-with-unit">
@@ -52,37 +113,72 @@
           <input
             type="digit"
             class="setting-input amount-input"
-            placeholder="0.00"
+            placeholder="请输入月收入"
             value="{{monthlyIncome}}"
             bindinput="onIncomeInput"
           />
         </view>
       </view>
     </view>
-    <view class="setting-hint">
-      <text class="hint-icon">💡</text>
-      告诉AI"我的月收入是X元"，AI会自动帮你计算合理的消费阈值
+
+    <!-- 手动模式：直接设置阈值 -->
+    <view wx:if="{{isManualMode}}" class="setting-card">
+      <view class="setting-item">
+        <view class="setting-label-row">
+          <text class="setting-icon">📅</text>
+          <text class="setting-label">日预警</text>
+        </view>
+        <view class="input-with-unit">
+          <text class="unit">¥</text>
+          <input
+            type="digit"
+            class="setting-input amount-input"
+            placeholder="0.00"
+            value="{{dailyThreshold}}"
+            bindinput="onDailyThresholdInput"
+          />
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-label-row">
+          <text class="setting-icon">📆</text>
+          <text class="setting-label">周预警</text>
+        </view>
+        <view class="input-with-unit">
+          <text class="unit">¥</text>
+          <input
+            type="digit"
+            class="setting-input amount-input"
+            placeholder="0.00"
+            value="{{weeklyThreshold}}"
+            bindinput="onWeeklyThresholdInput"
+          />
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-label-row">
+          <text class="setting-icon">🗓️</text>
+          <text class="setting-label">月预警</text>
+        </view>
+        <view class="input-with-unit">
+          <text class="unit">¥</text>
+          <input
+            type="digit"
+            class="setting-input amount-input"
+            placeholder="0.00"
+            value="{{monthlyThreshold}}"
+            bindinput="onMonthlyThresholdInput"
+          />
+        </view>
+      </view>
     </view>
 
-    <!-- 阈值预览 -->
-    <view class="threshold-preview">
-      <view class="threshold-header">
-        <text class="threshold-emoji">🎯</text>
-        <text class="threshold-title">计算出的预警阈值</text>
-      </view>
-      <view class="threshold-grid">
-        <view class="threshold-card">
-          <view class="threshold-badge daily">日</view>
-          <text class="threshold-value">¥{{dailyThreshold}}</text>
-        </view>
-        <view class="threshold-card">
-          <view class="threshold-badge weekly">周</view>
-          <text class="threshold-value">¥{{weeklyThreshold}}</text>
-        </view>
-        <view class="threshold-card">
-          <view class="threshold-badge monthly">月</view>
-          <text class="threshold-value">¥{{monthlyThreshold}}</text>
-        </view>
+    <!-- 阈值说明卡片 -->
+    <view class="threshold-info-card">
+      <view class="info-icon">💡</view>
+      <view class="info-content">
+        <text class="info-title">{{isManualMode ? '手动设置模式' : '自动计算模式'}}</text>
+        <text class="info-desc">{{isManualMode ? '直接设置每日/每周/每月的最大消费额度' : '根据月收入自动计算：日=5%, 周=20%, 月=50%'}}</text>
       </view>
     </view>
   </view>

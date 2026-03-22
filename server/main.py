@@ -69,6 +69,79 @@ def get_baidu_access_token():
 if not BAIDU_API_KEY or not BAIDU_SECRET_KEY:
     print("⚠️ 警告: 百度OCR API未配置，OCR功能将不可用")
 
+# ============ 微信订阅消息配置 ============
+WECHAT_APP_ID = os.getenv("WECHAT_APP_ID")
+WECHAT_APP_SECRET = os.getenv("WECHAT_APP_SECRET")
+WECHAT_TEMPLATE_ID = "9OeMu-Bzw8Yt4vbibXQZbJ7iwzVfCGX6BrCp9BGJEro"
+
+# 微信 access_token 缓存
+_wechat_token = {"token": None, "expires_at": 0}
+
+def get_wechat_access_token():
+    """获取微信 access_token（带缓存）"""
+    import time
+    global _wechat_token
+
+    if _wechat_token["token"] and time.time() < _wechat_token["expires_at"]:
+        return _wechat_token["token"]
+
+    if not WECHAT_APP_ID or not WECHAT_APP_SECRET:
+        print("⚠️ 微信APP配置未设置，无法发送订阅消息")
+        return None
+
+    url = f"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={WECHAT_APP_ID}&secret={WECHAT_APP_SECRET}"
+    try:
+        response = requests.get(url)
+        result = response.json()
+        token = result.get("access_token")
+        expires_in = result.get("expires_in", 7200)
+        if token:
+            # 提前5分钟刷新
+            _wechat_token["token"] = token
+            _wechat_token["expires_at"] = time.time() + expires_in - 300
+            return token
+    except Exception as e:
+        print(f"获取微信access_token失败: {e}")
+    return None
+
+def send_subscribe_message(openid: str, expense_amount: float, monthly_total: float, monthly_limit: float, expense_type: str) -> bool:
+    """发送订阅消息"""
+    access_token = get_wechat_access_token()
+    if not access_token:
+        return False
+
+    url = f"https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token={access_token}"
+
+    # 格式化日期
+    from datetime import datetime
+    date_str = datetime.now().strftime("%Y年%m月%d日 %H:%M")
+
+    data = {
+        "touser": openid,
+        "template_id": WECHAT_TEMPLATE_ID,
+        "page": "pages/bill/bill",
+        "data": {
+            "time1": {"value": date_str},
+            "amount2": {"value": f"{expense_amount:.2f}"},
+            "phrase3": {"value": f"{monthly_total:.2f}元"},
+            "number4": {"value": f"{monthly_limit:.2f}"},
+            "name5": {"value": expense_type}
+        }
+    }
+
+    try:
+        response = requests.post(url, json=data)
+        result = response.json()
+        if result.get("errcode") == 0:
+            print(f"订阅消息发送成功: {openid}")
+            return True
+        else:
+            print(f"订阅消息发送失败: {result}")
+            return False
+    except Exception as e:
+        print(f"发送订阅消息异常: {e}")
+        return False
+
 # ============ 配置 ============
 DATABASE_PATH = "accounting.db"
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
@@ -139,7 +212,7 @@ def save_user_financial(openid: str, monthly_income: float):
     """保存用户财务信息"""
     daily = monthly_income * 0.05
     weekly = monthly_income * 0.20
-    monthly = monthly_income * 0.80
+    monthly = monthly_income * 0.50
 
     conn = sqlite3.connect(DATABASE_PATH)
     c = conn.cursor()
@@ -460,6 +533,22 @@ async def save_transaction(req: SaveTransactionRequest):
 
             alert = check_spending_alert(req.openid)
 
+            # 如果超支，发送订阅消息
+            if alert and transaction_type != "income":
+                financial = get_user_financial(req.openid)
+                monthly_totals = get_period_totals(req.openid, "month")
+                monthly_total = monthly_totals["totalExpense"]
+                monthly_limit = financial["monthly_threshold"]
+
+                # 异步发送订阅消息（不阻塞返回）
+                send_subscribe_message(
+                    openid=req.openid,
+                    expense_amount=amount,
+                    monthly_total=monthly_total,
+                    monthly_limit=monthly_limit,
+                    expense_type=category
+                )
+
             return {
                 "success": True,
                 "message": "已记录这笔支出~",
@@ -500,6 +589,43 @@ async def calculate_threshold(openid: str):
         "weekly": financial["weekly_threshold"],
         "monthly": financial["monthly_threshold"]
     }
+
+@app.post("/api/save_threshold")
+async def save_threshold(req: Request):
+    """保存自定义阈值"""
+    try:
+        body = await req.json()
+        openid = body.get("openid")
+        daily = float(body.get("daily", 0))
+        weekly = float(body.get("weekly", 0))
+        monthly = float(body.get("monthly", 0))
+
+        if not openid:
+            return {"success": False, "message": "缺少openid"}
+
+        # 更新用户财务信息中的阈值
+        conn = sqlite3.connect(DATABASE_PATH)
+        c = conn.cursor()
+
+        # 先获取现有收入
+        c.execute("SELECT monthly_income FROM user_financials WHERE openid = ?", (openid,))
+        row = c.fetchone()
+        monthly_income = row[0] if row else 0
+
+        c.execute("""
+            INSERT OR REPLACE INTO user_financials
+            (openid, monthly_income, daily_threshold, weekly_threshold, monthly_threshold, updated_at)
+            VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        """, (openid, monthly_income, daily, weekly, monthly))
+
+        conn.commit()
+        conn.close()
+
+        return {"success": True, "message": "阈值保存成功"}
+
+    except Exception as e:
+        print(f"保存阈值失败: {e}")
+        return {"success": False, "message": str(e)}
 
 @app.post("/api/ocr_recognize")
 async def ocr_recognize(req: Request):
