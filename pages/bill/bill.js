@@ -16,7 +16,9 @@ Page({
     transactions: [],
     serverUrl: '',
     // 日历相关
-    calendarData: []
+    calendarData: [],
+    selectedDate: '',  // 选中的日期
+    filteredTransactions: []  // 筛选后的交易列表
   },
 
   onLoad() {
@@ -174,6 +176,23 @@ Page({
   onCalendarDayTap(e) {
     const { date, hasExpense } = e.detail;
     console.log('点击日期:', date, '有消费:', hasExpense);
+
+    // 根据选中日期筛选交易
+    if (date) {
+      const filtered = this.data.transactions.filter(t => t.dateStr === date);
+      this.setData({
+        selectedDate: date,
+        filteredTransactions: filtered
+      });
+    }
+  },
+
+  // 清除日期筛选
+  clearDateFilter() {
+    this.setData({
+      selectedDate: '',
+      filteredTransactions: []
+    });
   },
 
   // 封装 wx.request 为 Promise

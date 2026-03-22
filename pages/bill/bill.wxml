@@ -4,6 +4,7 @@
   <calendar
     id="calendar"
     expenseData="{{calendarData}}"
+    selectedDate="{{selectedDate}}"
     bind:daytap="onCalendarDayTap"
   />
 
@@ -148,25 +149,55 @@
       <text class="empty-hint">去记账页面发送截图开始吧~</text>
     </view>
 
-    <view class="transaction-header" wx:if="{{transactions.length > 0}}">
-      <text>📝 交易明细</text>
-    </view>
-
-    <block wx:for="{{transactions}}" wx:key="_id">
-      <view class="transaction-item" bindtap="onTransactionTap" data-id="{{item._id}}">
-        <view class="transaction-icon {{getCategoryClass(item.category)}}">
-          <text>{{getCategoryEmoji(item.category)}}</text>
-        </view>
-        <view class="transaction-left">
-          <view class="transaction-category">{{item.category}}</view>
-          <view class="transaction-merchant">{{item.merchant || item.description}}</view>
-          <view class="transaction-date">{{item.dateStr}}</view>
-        </view>
-        <view class="transaction-right">
-          <text class="transaction-amount expense">-¥{{item.amount}}</text>
+    <!-- 选中日期的筛选结果 -->
+    <view wx:elif="{{selectedDate}}">
+      <view class="transaction-header">
+        <text>📅 {{selectedDate}}</text>
+        <view class="clear-filter" bindtap="clearDateFilter">
+          <text>清除筛选</text>
         </view>
       </view>
-    </block>
+      <block wx:for="{{filteredTransactions}}" wx:key="_id">
+        <view class="transaction-item" bindtap="onTransactionTap" data-id="{{item._id}}">
+          <view class="transaction-icon {{getCategoryClass(item.category)}}">
+            <text>{{getCategoryEmoji(item.category)}}</text>
+          </view>
+          <view class="transaction-left">
+            <view class="transaction-category">{{item.category}}</view>
+            <view class="transaction-merchant">{{item.merchant || item.description}}</view>
+            <view class="transaction-date">{{item.dateStr}}</view>
+          </view>
+          <view class="transaction-right">
+            <text class="transaction-amount expense">-¥{{item.amount}}</text>
+          </view>
+        </view>
+      </block>
+      <view wx:if="{{filteredTransactions.length === 0}}" class="no-data">
+        <text>当天没有消费记录</text>
+      </view>
+    </view>
+
+    <!-- 全部交易 -->
+    <view wx:else>
+      <view class="transaction-header">
+        <text>📝 交易明细</text>
+      </view>
+      <block wx:for="{{transactions}}" wx:key="_id">
+        <view class="transaction-item" bindtap="onTransactionTap" data-id="{{item._id}}">
+          <view class="transaction-icon {{getCategoryClass(item.category)}}">
+            <text>{{getCategoryEmoji(item.category)}}</text>
+          </view>
+          <view class="transaction-left">
+            <view class="transaction-category">{{item.category}}</view>
+            <view class="transaction-merchant">{{item.merchant || item.description}}</view>
+            <view class="transaction-date">{{item.dateStr}}</view>
+          </view>
+          <view class="transaction-right">
+            <text class="transaction-amount expense">-¥{{item.amount}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
 
     <!-- 底部留白 -->
     <view class="bottom-spacing"></view>

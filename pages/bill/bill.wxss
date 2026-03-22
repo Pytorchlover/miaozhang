@@ -524,6 +524,27 @@
   margin-bottom: 16rpx;
 }
 
+.clear-filter {
+  margin-left: auto;
+  padding: 8rpx 20rpx;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 100%);
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  color: #ff8fa3;
+}
+
+.clear-filter:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.no-data {
+  text-align: center;
+  padding: 40rpx;
+  color: #9a8a82;
+  font-size: 28rpx;
+}
+
 .transaction-item {
   display: flex;
   align-items: center;
