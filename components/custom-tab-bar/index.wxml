@@ -1,0 +1,42 @@
+<view class="tab-bar">
+  <view class="tab-bar-bg"></view>
+
+  <view
+    class="tab-item {{current === 'chat' ? 'active' : ''}}"
+    bindtap="switchTab"
+    data-path="/pages/chat/chat"
+  >
+    <view class="tab-icon">
+      <text wx:if="{{current === 'chat'}}" class="emoji">💰</text>
+      <text wx:else class="emoji">✨</text>
+    </view>
+    <text class="tab-text">记账</text>
+    <view class="active-dot" wx:if="{{current === 'chat'}}"></view>
+  </view>
+
+  <view
+    class="tab-item {{current === 'bill' ? 'active' : ''}}"
+    bindtap="switchTab"
+    data-path="/pages/bill/bill"
+  >
+    <view class="tab-icon">
+      <text wx:if="{{current === 'bill'}}" class="emoji">📊</text>
+      <text wx:else class="emoji">📋</text>
+    </view>
+    <text class="tab-text">账单</text>
+    <view class="active-dot" wx:if="{{current === 'bill'}}"></view>
+  </view>
+
+  <view
+    class="tab-item {{current === 'settings' ? 'active' : ''}}"
+    bindtap="switchTab"
+    data-path="/pages/settings/settings"
+  >
+    <view class="tab-icon">
+      <text wx:if="{{current === 'settings'}}" class="emoji">⚙️</text>
+      <text wx:else class="emoji">🔧</text>
+    </view>
+    <text class="tab-text">设置</text>
+    <view class="active-dot" wx:if="{{current === 'settings'}}"></view>
+  </view>
+</view>

@@ -1,0 +1,85 @@
+<!-- 日历组件 -->
+<view class="calendar-container">
+  <!-- 月份切换 -->
+  <view class="calendar-header">
+    <view class="month-picker">
+      <view class="prev-btn" bindtap="prevMonth">
+        <text class="arrow">‹</text>
+      </view>
+      <view class="month-display">
+        <text class="month-text">{{year}}年{{month}}月</text>
+      </view>
+      <view class="next-btn" bindtap="nextMonth">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 今日快捷按钮 -->
+    <view class="today-btn" bindtap="goToToday">
+      <text>今天</text>
+    </view>
+  </view>
+
+  <!-- 星期标题 -->
+  <view class="weekday-row">
+    <view class="weekday-item" wx:for="{{weekdays}}" wx:key="index">
+      <text>{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 日期网格 -->
+  <view class="days-grid">
+    <!-- 空白填充 -->
+    <view class="day-cell empty" wx:for="{{firstDayPadding}}" wx:key="index"></view>
+
+    <!-- 日期 -->
+    <view
+      class="day-cell {{item.hasExpense ? 'has-expense' : ''}} {{item.isToday ? 'today' : ''}} {{item.isSelected ? 'selected' : ''}}"
+      wx:for="{{days}}"
+      wx:key="index"
+      bindtap="onDayTap"
+      data-date="{{item.dateStr}}"
+      data-has-expense="{{item.hasExpense}}"
+    >
+      <view class="day-content">
+        <text class="day-number">{{item.day}}</text>
+        <view wx:if="{{item.hasExpense}}" class="expense-dot">
+          <text class="expense-amount">¥{{item.expenseAmount}}</text>
+        </view>
+      </view>
+
+      <!-- 今日标记 -->
+      <view wx:if="{{item.isToday}}" class="today-ring"></view>
+
+      <!-- 选中标记 -->
+      <view wx:if="{{item.isSelected}}" class="selected-bg"></view>
+    </view>
+  </view>
+
+  <!-- 当日详情 -->
+  <view wx:if="{{selectedDate && selectedDateTransactions.length > 0}}" class="day-detail">
+    <view class="detail-header">
+      <text class="detail-date">{{selectedDate}}</text>
+      <text class="detail-total">共 ¥{{selectedDayTotal}}</text>
+    </view>
+
+    <scroll-view scroll-y class="detail-list">
+      <view class="detail-item" wx:for="{{selectedDateTransactions}}" wx:key="_id">
+        <view class="detail-icon {{getCategoryClass(item.category)}}">
+          <text>{{getCategoryEmoji(item.category)}}</text>
+        </view>
+        <view class="detail-info">
+          <text class="detail-category">{{item.category}}</text>
+          <text class="detail-merchant">{{item.merchant || item.description}}</text>
+        </view>
+        <text class="detail-amount">-¥{{item.amount}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 无数据提示 -->
+  <view wx:elif="{{selectedDate && selectedDateTransactions.length === 0}}" class="day-empty">
+    <text class="empty-icon">📅</text>
+    <text class="empty-text">{{selectedDate}} 没有消费记录</text>
+  </view>
+</view>

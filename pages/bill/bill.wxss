@@ -1,0 +1,370 @@
+/* 账单页面样式 - 治愈可爱风 */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fef9f3 0%, #f5f0eb 100%);
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+/* ==================== 统计卡片 ==================== */
+.stats-card {
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 30rpx rgba(255, 143, 163, 0.15);
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.stats-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.stats-emoji {
+  font-size: 36rpx;
+}
+
+.stats-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #5a4a42;
+}
+
+.picker-btn {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 12rpx 20rpx;
+  background: #fef9f3;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: #ff8fa3;
+}
+
+.picker-arrow {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.stats-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  margin: 0 8rpx;
+  transition: transform 0.2s;
+}
+
+.stat-item:active {
+  transform: scale(0.96);
+}
+
+.stat-item.expense {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 100%);
+}
+
+.stat-item.income {
+  background: linear-gradient(135deg, #f5fff5 0%, #e4ffe8 100%);
+}
+
+.stat-icon {
+  font-size: 40rpx;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #9a8a82;
+  margin-bottom: 4rpx;
+}
+
+.stat-value {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.stat-item.expense .stat-value {
+  color: #ff6b7a;
+}
+
+.stat-item.income .stat-value {
+  color: #52c41a;
+}
+
+/* 预警提示 */
+.alert-tip {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 24rpx;
+  padding: 20rpx 24rpx;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 100%);
+  border-radius: 16rpx;
+  border-left: 6rpx solid #ff6b7a;
+}
+
+.alert-icon {
+  font-size: 28rpx;
+}
+
+.alert-tip text {
+  color: #ff6b7a;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+/* ==================== 阈值卡片 ==================== */
+.threshold-card {
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 30rpx rgba(255, 143, 163, 0.15);
+}
+
+.threshold-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 24rpx;
+}
+
+.threshold-emoji {
+  font-size: 32rpx;
+}
+
+.threshold-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #5a4a42;
+}
+
+.threshold-list {
+  display: flex;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.threshold-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx;
+  background: #fef9f3;
+  border-radius: 16rpx;
+}
+
+.threshold-badge {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.threshold-badge.daily {
+  background: linear-gradient(135deg, #ffb6c1 0%, #ff8fa3 100%);
+}
+
+.threshold-badge.weekly {
+  background: linear-gradient(135deg, #ffd6cc 0%, #ffb3a0 100%);
+}
+
+.threshold-badge.monthly {
+  background: linear-gradient(135deg, #ff8fa3 0%, #ff6b7a 100%);
+}
+
+.threshold-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.threshold-label {
+  font-size: 20rpx;
+  color: #9a8a82;
+}
+
+.threshold-value {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #5a4a42;
+}
+
+/* ==================== 交易列表 ==================== */
+.transaction-list {
+  height: calc(100vh - 1050rpx);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20rpx); }
+}
+
+.empty-text {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #5a4a42;
+  margin-bottom: 12rpx;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #9a8a82;
+}
+
+.transaction-header {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  padding: 16rpx 8rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #5a4a42;
+  margin-bottom: 16rpx;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.transaction-item:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.transaction-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  flex-shrink: 0;
+}
+
+.transaction-icon.cat-food {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.transaction-icon.cat-shopping {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.transaction-icon.cat-transport {
+  background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+}
+
+.transaction-icon.cat-medical {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.transaction-icon.cat-housing {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.transaction-icon.cat-entertainment {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+}
+
+.transaction-icon.cat-education {
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+
+.transaction-icon.cat-communication {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.transaction-icon.cat-other {
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+}
+
+.transaction-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.transaction-category {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #5a4a42;
+  margin-bottom: 4rpx;
+}
+
+.transaction-merchant {
+  font-size: 24rpx;
+  color: #9a8a82;
+  margin-bottom: 4rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-date {
+  font-size: 22rpx;
+  color: #bbb;
+}
+
+.transaction-right {
+  flex-shrink: 0;
+}
+
+.transaction-amount {
+  font-size: 34rpx;
+  font-weight: 600;
+}
+
+.transaction-amount.expense {
+  color: #ff6b7a;
+}
+
+/* 底部留白 - 给自定义 tabBar 留空间 */
+.bottom-spacing {
+  height: 180rpx;
+  width: 100%;
+}

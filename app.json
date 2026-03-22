@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/chat/chat",
+    "pages/bill/bill",
+    "pages/settings/settings"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "AI记账",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fef9f3",
+    "backgroundTextStyle": "dark"
+  },
+  "usingComponents": {
+    "custom-tab-bar": "/components/custom-tab-bar/index"
+  }
+}

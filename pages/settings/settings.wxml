@@ -1,0 +1,128 @@
+<!-- 设置页面 -->
+<view class="container">
+  <!-- 小猪吉祥物 -->
+  <view class="mascot-section">
+    <view class="mascot">🐷</view>
+    <text class="mascot-text">记账小助手设置</text>
+  </view>
+
+  <!-- API配置 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-emoji">🔑</text>
+      <text class="section-title">API 配置</text>
+    </view>
+    <view class="setting-card">
+      <view class="setting-item">
+        <view class="setting-label-row">
+          <text class="setting-icon">🤖</text>
+          <text class="setting-label">DeepSeek API Key</text>
+        </view>
+        <input
+          type="text"
+          class="setting-input"
+          placeholder="请输入API Key"
+          value="{{apiKey}}"
+          bindinput="onApiKeyInput"
+        />
+      </view>
+    </view>
+    <view class="setting-hint">
+      <text class="hint-icon">💡</text>
+      用于AI智能记账和阈值判断，请在
+      <text class="link" bindtap="openDeepSeek">DeepSeek官网</text>
+      申请
+    </view>
+  </view>
+
+  <!-- 用户信息 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-emoji">💰</text>
+      <text class="section-title">财务信息</text>
+    </view>
+    <view class="setting-card">
+      <view class="setting-item">
+        <view class="setting-label-row">
+          <text class="setting-icon">📊</text>
+          <text class="setting-label">月收入</text>
+        </view>
+        <view class="input-with-unit">
+          <text class="unit">¥</text>
+          <input
+            type="digit"
+            class="setting-input amount-input"
+            placeholder="0.00"
+            value="{{monthlyIncome}}"
+            bindinput="onIncomeInput"
+          />
+        </view>
+      </view>
+    </view>
+    <view class="setting-hint">
+      <text class="hint-icon">💡</text>
+      告诉AI"我的月收入是X元"，AI会自动帮你计算合理的消费阈值
+    </view>
+
+    <!-- 阈值预览 -->
+    <view class="threshold-preview">
+      <view class="threshold-header">
+        <text class="threshold-emoji">🎯</text>
+        <text class="threshold-title">计算出的预警阈值</text>
+      </view>
+      <view class="threshold-grid">
+        <view class="threshold-card">
+          <view class="threshold-badge daily">日</view>
+          <text class="threshold-value">¥{{dailyThreshold}}</text>
+        </view>
+        <view class="threshold-card">
+          <view class="threshold-badge weekly">周</view>
+          <text class="threshold-value">¥{{weeklyThreshold}}</text>
+        </view>
+        <view class="threshold-card">
+          <view class="threshold-badge monthly">月</view>
+          <text class="threshold-value">¥{{monthlyThreshold}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 消息订阅 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-emoji">🔔</text>
+      <text class="section-title">通知设置</text>
+    </view>
+    <view class="setting-card">
+      <view class="setting-item" bindtap="requestSubscribe">
+        <view class="setting-label-row">
+          <text class="setting-icon">📬</text>
+          <text class="setting-label">订阅预警消息</text>
+        </view>
+        <view class="toggle-btn {{subscribed ? 'active' : ''}}">
+          <view class="toggle-circle"></view>
+        </view>
+      </view>
+    </view>
+    <view class="setting-hint">
+      <text class="hint-icon">💡</text>
+      当支出超过阈值时，AI会通过微信推送提醒你
+    </view>
+  </view>
+
+  <!-- 保存按钮 -->
+  <button class="save-btn" bindtap="saveSettings">
+    <text class="btn-icon">✓</text>
+    <text>保存设置</text>
+  </button>
+
+  <!-- 版本信息 -->
+  <view class="version">
+    <text>AI记账 v1.0.0</text>
+    <text class="version-divider">•</text>
+    <text>Made with 💕</text>
+  </view>
+</view>
+
+<!-- 自定义底部导航 - 放在 container 外面因为是 fixed 定位 -->
+<custom-tab-bar current="settings"></custom-tab-bar>

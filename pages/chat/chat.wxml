@@ -1,0 +1,201 @@
+<!-- 聊天记账页面 -->
+<view class="container">
+  <!-- 消息列表 -->
+  <scroll-view
+    scroll-y
+    class="message-list"
+    scroll-top="{{scrollTop}}"
+    enhanced
+    show-scrollbar="{{false}}"
+  >
+    <!-- 欢迎区域 - 仅当没有真实对话消息时显示 -->
+    <view wx:if="{{showWelcome}}" class="welcome-section">
+      <!-- 背景漂浮爱心 -->
+      <view class="welcome-bg-hearts">
+        <text class="bg-heart">♥</text>
+        <text class="bg-heart">♥</text>
+        <text class="bg-heart">♥</text>
+        <text class="bg-heart">♥</text>
+      </view>
+
+      <!-- 可爱猫咪吉祥物 -->
+      <view class="cat-mascot">
+        <!-- 漂浮装饰 -->
+        <view class="floating-elements">
+          <text class="floating-coin coin-1">💰</text>
+          <text class="floating-coin coin-2">✨</text>
+          <text class="floating-coin coin-3">💎</text>
+          <text class="floating-star star-1">⭐</text>
+          <text class="floating-star star-2">✨</text>
+          <text class="floating-star star-3">⭐</text>
+          <text class="floating-heart heart-1">💕</text>
+          <text class="floating-heart heart-2">💗</text>
+          <text class="floating-heart heart-3">💖</text>
+        </view>
+
+        <!-- 猫咪身体 -->
+        <view class="cat-body"></view>
+
+        <!-- 猫咪头部 -->
+        <view class="cat-head">
+          <!-- 耳朵 -->
+          <view class="cat-ears">
+            <view class="cat-ear left">
+              <view class="cat-ear-inner"></view>
+            </view>
+            <view class="cat-ear right">
+              <view class="cat-ear-inner"></view>
+            </view>
+          </view>
+
+          <!-- 眼睛 -->
+          <view class="cat-eyes">
+            <view class="cat-eye"></view>
+            <view class="cat-eye"></view>
+          </view>
+
+          <!-- 鼻子和嘴巴 -->
+          <view class="cat-nose"></view>
+          <view class="cat-mouth"></view>
+
+          <!-- 腮红 -->
+          <view class="cat-blush left"></view>
+          <view class="cat-blush right"></view>
+
+          <!-- 蝴蝶结 -->
+          <view class="cat-bow">
+            <view class="cat-bow-left"></view>
+            <view class="cat-bow-center"></view>
+            <view class="cat-bow-right"></view>
+          </view>
+        </view>
+
+        <!-- 爪子 -->
+        <view class="cat-paws">
+          <view class="cat-paw"></view>
+          <view class="cat-paw"></view>
+        </view>
+      </view>
+
+      <!-- 欢迎文字 -->
+      <view class="welcome-text">
+        <text class="welcome-title">你好呀！我是你的记账小猫咪~</text>
+        <text class="welcome-subtitle">发送付款截图，我会帮你自动识别记账\n也可以直接告诉我花了多少钱哦~</text>
+      </view>
+
+      <!-- 快捷操作 -->
+      <view class="quick-actions">
+        <view class="action-btn primary" bindtap="quickAction" data-type="income">
+          <text class="action-icon">💰</text>
+          <text class="action-text">设置月收入</text>
+        </view>
+        <view class="action-btn secondary" bindtap="quickAction" data-type="screenshot">
+          <text class="action-icon">📸</text>
+          <text class="action-text">发送截图</text>
+        </view>
+      </view>
+
+      <!-- 示例提示 -->
+      <view class="example-hints">
+        <text class="hint-label">试试这样说：</text>
+        <view class="hint-item">"午餐花了35元"</view>
+        <view class="hint-item">"我的月收入是8000"</view>
+        <view class="hint-item">"今天买了件衣服500元"</view>
+      </view>
+    </view>
+
+    <!-- 消息列表 -->
+    <block wx:for="{{messages}}" wx:key="id">
+      <!-- 用户消息 -->
+      <view wx:if="{{item.role === 'user'}}" class="message user-message {{item.image ? 'has-image' : ''}}">
+        <view class="message-content">
+          <text>{{item.content}}</text>
+          <image wx:if="{{item.image}}" src="{{item.image}}" mode="widthFix" class="message-image" bindtap="previewImage" data-url="{{item.image}}"/>
+        </view>
+        <view class="avatar user-avatar">我</view>
+      </view>
+
+      <!-- AI消息 -->
+      <view wx:else class="message ai-message">
+        <view class="avatar ai-avatar">
+          <text class="avatar-icon">🐱</text>
+        </view>
+        <view class="message-content ai-content">
+          <text>{{item.content}}</text>
+          <!-- 记账确认卡片 -->
+          <view wx:if="{{item.type === 'confirm' && item.data}}" class="confirm-card">
+            <view class="confirm-header">
+              <text class="confirm-icon">📝</text>
+              <text>请确认这笔支出</text>
+            </view>
+            <view class="confirm-grid">
+              <view class="confirm-item">
+                <text class="label">金额</text>
+                <text class="value amount">¥{{item.data.amount}}</text>
+              </view>
+              <view class="confirm-item">
+                <text class="label">商家</text>
+                <text class="value">{{item.data.merchant || '未知'}}</text>
+              </view>
+              <view class="confirm-item">
+                <text class="label">分类</text>
+                <text class="value category">{{item.data.category}}</text>
+              </view>
+              <view class="confirm-item">
+                <text class="label">日期</text>
+                <text class="value">{{item.data.date}}</text>
+              </view>
+            </view>
+            <view class="confirm-actions">
+              <button class="btn-confirm" bindtap="confirmExpense" data-id="{{item.id}}">
+                <text>✓ 确认</text>
+              </button>
+              <button class="btn-cancel" bindtap="cancelExpense" data-id="{{item.id}}">
+                <text>✕ 取消</text>
+              </button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 加载中 -->
+    <view wx:if="{{loading}}" class="loading">
+      <view class="loading-dots">
+        <view class="dot"></view>
+        <view class="dot"></view>
+        <view class="dot"></view>
+      </view>
+      <text>猫咪正在分析中...</text>
+    </view>
+
+    <!-- 底部留白，给 tabBar 留空间 -->
+    <view class="bottom-spacing"></view>
+  </scroll-view>
+
+  <!-- tabBar 空间 -->
+  <view class="input-spacing"></view>
+
+  <!-- 输入区域 -->
+  <view class="input-area safe-area-bottom">
+    <view class="input-row">
+      <view class="image-btn" bindtap="chooseImage">
+        <text>+</text>
+      </view>
+      <input
+        class="chat-input"
+        type="text"
+        placeholder="发送截图自动记账，或直接输入..."
+        bindinput="onInput"
+        bindconfirm="sendMessage"
+        value="{{inputText}}"
+      />
+      <button class="send-btn" bindtap="sendMessage" disabled="{{!inputText && !pendingImage}}">
+        <text class="send-icon">▶</text>
+      </button>
+    </view>
+  </view>
+</view>
+
+<!-- 自定义底部导航 - 放在 container 外面因为是 fixed 定位 -->
+<custom-tab-bar current="chat"></custom-tab-bar>

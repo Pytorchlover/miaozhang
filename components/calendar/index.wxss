@@ -1,0 +1,338 @@
+/* 日历组件样式 - 粉色可爱风 */
+
+.calendar-container {
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 30rpx rgba(255, 143, 163, 0.15);
+}
+
+/* ==================== 月份切换 ==================== */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.month-picker {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.prev-btn,
+.next-btn {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.prev-btn:active,
+.next-btn:active {
+  transform: scale(0.9);
+  opacity: 0.8;
+}
+
+.arrow {
+  font-size: 40rpx;
+  color: #ff8fa3;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.month-display {
+  min-width: 200rpx;
+  text-align: center;
+}
+
+.month-text {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #5a4a42;
+}
+
+.today-btn {
+  padding: 12rpx 24rpx;
+  background: linear-gradient(135deg, #ff8fa3 0%, #ff6b7a 100%);
+  border-radius: 30rpx;
+  box-shadow: 0 4rpx 15rpx rgba(255, 107, 122, 0.3);
+}
+
+.today-btn text {
+  font-size: 26rpx;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* ==================== 星期标题 ==================== */
+.weekday-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 12rpx 0;
+  margin-bottom: 12rpx;
+  border-bottom: 2rpx solid #fef0f3;
+}
+
+.weekday-item {
+  width: 80rpx;
+  text-align: center;
+}
+
+.weekday-item text {
+  font-size: 24rpx;
+  color: #9a8a82;
+  font-weight: 500;
+}
+
+.weekday-item:first-child text,
+.weekday-item:last-child text {
+  color: #ffb4c0;
+}
+
+/* ==================== 日期网格 ==================== */
+.days-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.day-cell {
+  width: 14.28%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.day-cell.empty {
+  pointer-events: none;
+}
+
+.day-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  position: relative;
+}
+
+.day-number {
+  font-size: 30rpx;
+  color: #5a4a42;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.day-cell.today .day-number {
+  color: #ff6b7a;
+  font-weight: 600;
+}
+
+.day-cell.has-expense .day-number {
+  color: #ff6b7a;
+}
+
+/* 消费金额标记 */
+.expense-dot {
+  margin-top: 4rpx;
+  padding: 2rpx 8rpx;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe4e8 100%);
+  border-radius: 10rpx;
+  max-width: 90%;
+}
+
+.expense-amount {
+  font-size: 18rpx;
+  color: #ff6b7a;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 今日外圈 */
+.today-ring {
+  position: absolute;
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+  border: 4rpx solid #ff8fa3;
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+/* 选中背景 */
+.selected-bg {
+  position: absolute;
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff8fa3 0%, #ff6b7a 100%);
+  box-shadow: 0 4rpx 15rpx rgba(255, 107, 122, 0.4);
+}
+
+.day-cell.selected .day-number {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.day-cell.selected .expense-amount {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.day-cell.selected .today-ring {
+  display: none;
+}
+
+/* ==================== 当日详情 ==================== */
+.day-detail {
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 2rpx solid #fef0f3;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.detail-date {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #5a4a42;
+}
+
+.detail-total {
+  font-size: 28rpx;
+  color: #ff6b7a;
+  font-weight: 500;
+}
+
+.detail-list {
+  max-height: 300rpx;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 16rpx;
+  background: #fef9f3;
+  border-radius: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.detail-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.detail-icon.cat-food {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.detail-icon.cat-shopping {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.detail-icon.cat-transport {
+  background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+}
+
+.detail-icon.cat-medical {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.detail-icon.cat-housing {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.detail-icon.cat-entertainment {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+}
+
+.detail-icon.cat-education {
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+
+.detail-icon.cat-communication {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+.detail-icon.cat-other {
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+}
+
+.detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.detail-category {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #5a4a42;
+}
+
+.detail-merchant {
+  font-size: 22rpx;
+  color: #9a8a82;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-amount {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #ff6b7a;
+}
+
+/* 无数据提示 */
+.day-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 0;
+  margin-top: 24rpx;
+  border-top: 2rpx solid #fef0f3;
+}
+
+.day-empty .empty-icon {
+  font-size: 60rpx;
+  margin-bottom: 12rpx;
+}
+
+.day-empty .empty-text {
+  font-size: 26rpx;
+  color: #9a8a82;
+}

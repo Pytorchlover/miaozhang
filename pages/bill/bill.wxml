@@ -1,0 +1,121 @@
+<!-- 账单列表页面 -->
+<view class="container">
+  <!-- 日历组件 -->
+  <calendar
+    id="calendar"
+    expenseData="{{calendarData}}"
+    bind:daytap="onCalendarDayTap"
+  />
+
+  <!-- 统计概览 -->
+  <view class="stats-card">
+    <view class="stats-header">
+      <view class="stats-title-row">
+        <text class="stats-emoji">📊</text>
+        <text class="stats-title">{{currentPeriod}}</text>
+      </view>
+      <picker mode="selector" range="{{periods}}" bindchange="onPeriodChange">
+        <view class="picker-btn">
+          <text>切换</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="stats-content">
+      <view class="stat-item expense">
+        <view class="stat-icon">📤</view>
+        <view class="stat-info">
+          <text class="stat-label">支出</text>
+          <text class="stat-value">¥{{totalExpense}}</text>
+        </view>
+      </view>
+      <view class="stat-item income">
+        <view class="stat-icon">📥</view>
+        <view class="stat-info">
+          <text class="stat-label">收入</text>
+          <text class="stat-value">¥{{totalIncome}}</text>
+        </view>
+      </view>
+      <view class="stat-item {{balance >= 0 ? 'income' : 'expense'}}">
+        <view class="stat-icon">{{balance >= 0 ? '💰' : '😢'}}</view>
+        <view class="stat-info">
+          <text class="stat-label">结余</text>
+          <text class="stat-value">¥{{balance}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 预警提示 -->
+    <view wx:if="{{alertMessage}}" class="alert-tip">
+      <text class="alert-icon">⚠️</text>
+      <text>{{alertMessage}}</text>
+    </view>
+  </view>
+
+  <!-- 预警阈值显示 -->
+  <view class="threshold-card">
+    <view class="threshold-header">
+      <text class="threshold-emoji">🎯</text>
+      <text class="threshold-title">消费预警阈值</text>
+    </view>
+    <view class="threshold-list">
+      <view class="threshold-item">
+        <view class="threshold-badge daily">日</view>
+        <view class="threshold-info">
+          <text class="threshold-label">日预警</text>
+          <text class="threshold-value">¥{{dailyThreshold}}</text>
+        </view>
+      </view>
+      <view class="threshold-item">
+        <view class="threshold-badge weekly">周</view>
+        <view class="threshold-info">
+          <text class="threshold-label">周预警</text>
+          <text class="threshold-value">¥{{weeklyThreshold}}</text>
+        </view>
+      </view>
+      <view class="threshold-item">
+        <view class="threshold-badge monthly">月</view>
+        <view class="threshold-info">
+          <text class="threshold-label">月预警</text>
+          <text class="threshold-value">¥{{monthlyThreshold}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 交易列表 -->
+  <scroll-view scroll-y class="transaction-list">
+    <view wx:if="{{transactions.length === 0}}" class="empty-state">
+      <view class="empty-icon">🐷</view>
+      <text class="empty-text">还没有记账记录</text>
+      <text class="empty-hint">去记账页面发送截图开始吧~</text>
+    </view>
+
+    <view class="transaction-header" wx:if="{{transactions.length > 0}}">
+      <text>📝 交易明细</text>
+    </view>
+
+    <block wx:for="{{transactions}}" wx:key="_id">
+      <view class="transaction-item" bindtap="onTransactionTap" data-id="{{item._id}}">
+        <view class="transaction-icon {{getCategoryClass(item.category)}}">
+          <text>{{getCategoryEmoji(item.category)}}</text>
+        </view>
+        <view class="transaction-left">
+          <view class="transaction-category">{{item.category}}</view>
+          <view class="transaction-merchant">{{item.merchant || item.description}}</view>
+          <view class="transaction-date">{{item.dateStr}}</view>
+        </view>
+        <view class="transaction-right">
+          <text class="transaction-amount expense">-¥{{item.amount}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 底部留白 -->
+    <view class="bottom-spacing"></view>
+  </scroll-view>
+</view>
+
+<!-- 自定义底部导航 - 放在 container 外面因为是 fixed 定位 -->
+<custom-tab-bar current="bill"></custom-tab-bar>
